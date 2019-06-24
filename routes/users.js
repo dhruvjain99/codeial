@@ -12,4 +12,7 @@ router.get('/sign-in', usersController.signIn);
 //Handle the request for sign-up i.e. creates a route sign-up
 router.get('/sign-up', usersController.signUp);
 
+//Create a route for creating a new user
+router.post('/create-user', usersController.createUser);
+
 module.exports = router;
