@@ -40,3 +40,27 @@ passport.deserializeUser(function(id, done){
         return done(null, user);
     });
 });
+
+//Check if the user is authenticated
+passport.checkAuthentication = function (req, res, next){
+    //if user is authenticated then move on / pass the request to next usersController.action
+    if (req.isAuthenticated()){
+        return next();
+    }
+
+    //if user is not authenticated then pass the request to sign-in page
+    return res.redirect('/users/sign-in');
+};
+
+//Send the authenticated user to locals to access the user in views
+passport.setAuthenticatedUser = function (req, res, next){
+    if (req.isAuthenticated()){
+        res.locals.user = req.user;
+    }
+
+    return next();
+};
+
+
+
+module.exports = passport;

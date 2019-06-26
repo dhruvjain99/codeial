@@ -47,6 +47,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(passport.setAuthenticatedUser);
 
 //use the routes for handling requests 
 app.use('/', require('./routes/index'));
