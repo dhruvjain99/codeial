@@ -1,3 +1,7 @@
 #layout-main {
   text-align: center;
 }
+
+#layout-main #posts-list-container ul {
+  list-style: none;
+}
