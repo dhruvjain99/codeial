@@ -7,9 +7,21 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const MongoStore = require('connect-mongo')(session);
+const sassMiddleware = require('node-sass-middleware');
 const port = 8080;
 const app = express();
 
+
+//Setup the sass middleware to precompile the scss files to css files
+// Note: you must place sass-middleware *before* `express.static` or else it will not work.
+
+app.use(sassMiddleware({
+    src: './assets/scss',
+    dest: './assets/css',
+    debug: true,
+    outputStyle: 'expanded',
+    prefix: '/css' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+}));
 
 //Parse the post requests
 app.use(express.urlencoded());

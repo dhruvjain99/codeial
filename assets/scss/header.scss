@@ -1,0 +1,37 @@
+$header-bg-color: rgb(32, 32, 133);
+$font-color: white;
+$font-family: Helvetica, Arial, sans-serif;
+#layout-header{
+    background-color: $header-bg-color;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    color: $font-color;
+    height: 10vh;
+
+    h1{
+        font-family: $font-family;
+        font-weight: 600;
+        margin: 0px 20px;
+
+        a{
+            color: $font-color;
+            text-decoration: none;
+        }
+    }
+
+    ul{
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        list-style: none;
+        margin: 0px 10px;
+
+        a{
+            color: $font-color;
+            margin: 0px 10px;
+            text-decoration: none;
+        }
+    }
+}
