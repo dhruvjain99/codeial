@@ -5,7 +5,7 @@ const passport = require('passport');
 const usersController = require('../controllers/users_controller');
 
 //Handle the request for profile i.e. creates a route profile
-router.get('/profile', passport.checkAuthentication, usersController.profile);
+router.get('/profile/:id', passport.checkAuthentication, usersController.profile);
 
 //Handle the request for sign-in i.e. creates a route sign-in
 router.get('/sign-in', usersController.signIn);
@@ -24,5 +24,8 @@ router.post('/create-session', passport.authenticate(
 
 // Create a route to sign-out
 router.get('/sign-out', usersController.destroySession);
+
+// Create a route to update the users profile details
+router.post('/update/:id', passport.checkAuthentication, usersController.updateProfile);
 
 module.exports = router;

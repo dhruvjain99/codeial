@@ -1,7 +1,14 @@
-#layout-main {
-  text-align: center;
+#home-container {
+  display: flex;
 }
 
-#layout-main #posts-list-container ul {
-  list-style: none;
+#home-container #feed-posts-container {
+  width: 70%;
+  padding: 15px;
+}
+
+#home-container #all-users-container {
+  width: 30%;
+  padding: 10px;
+  border-left: 1px solid lightgrey;
 }

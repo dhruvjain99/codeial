@@ -2,9 +2,19 @@ const User = require('../models/user');
 
 //render the profile page
 module.exports.profile = function(req, res){
-    return res.render('profile', {
-        title: "Profile",
+    User.findById(req.params.id, function(err, profileUser){
+        if(err){
+            console.log("Error in fetching the profile of a user from the database");
+            return;
+        }
+
+        return res.render('profile', {
+            title: "Profile",
+            profile_user:profileUser
+        });
+
     });
+    
 };
 
 //render the sign-in page
@@ -66,4 +76,21 @@ module.exports.destroySession = function (req, res){
     req.logout();
 
     return res.redirect('/');
+}
+
+// Update the users details
+module.exports.updateProfile = function(req, res){
+    if(req.user.id == req.params.id){
+        User.findByIdAndUpdate(req.params.id, req.body, function(err, profileUser){
+            if(err){
+                console.log("Error in updating the profile information of the user");
+                return;
+            }
+
+            return res.redirect('back');
+
+        });
+    } else{
+        return res.status(401).send("Unauthorized");
+    }
 }

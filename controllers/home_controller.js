@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const User = require('../models/user');
 
 module.exports.home = function (req, res){
     Post.find({})
@@ -15,11 +16,20 @@ module.exports.home = function (req, res){
             return;
         }
 
-        return res.render('home', {
-            title: "Home",
-            posts: postsList
+        User.find({}, function(err, usersList){
+            if(err){
+                console.log("Error in fetching the list of users from the database");
+                return;
+            }
+            return res.render('home', {
+                title: "Home",
+                posts: postsList,
+                all_users: usersList
+            });
+    
         });
 
+        
     });
     
 };

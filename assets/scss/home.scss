@@ -1,9 +1,13 @@
-#layout-main{
-    text-align: center;
+#home-container{
+    display: flex;
+    #feed-posts-container{
+        width: 70%;
+        padding: 15px;
+    }
 
-    #posts-list-container{
-        ul{
-            list-style: none;
-        }
+    #all-users-container{
+        width: 30%;
+        padding: 10px;
+        border-left: 1px solid lightgrey;
     }
 }
