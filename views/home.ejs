@@ -4,7 +4,7 @@
 <% if (locals.user){ %>
         <section id="feed-posts">
                 <h4>Posts</h4>
-                <form action="/post/create" method="POST" id="new-post-form">
+                <form action="/posts/create" method="POST" id="new-post-form">
                         <textarea name="content" id="post-text-area" placeholder="What's on your mind?" cols="30" rows="5"></textarea>
                         <input type="submit" value="Post">
                 </form>
@@ -13,32 +13,8 @@
 
 <section id="posts-list-container">
         <ul>
-                <% for(var post of locals.posts){ %>
-                        <li>
-                                <p>
-                                        Content : <%= post.content %>
-                                        <br>
-                                        <small>By <%= post.user.name %></small>
-                                        <div class="post-comments">
-                                                <ul class="comments-list">
-                                                        <% for(var comment of post.comments){ %>
-                                                                <li>
-                                                                        <p><%= comment.user.name %> : <%= comment.content %></p>
-                                                                </li>
-                                                        <% } %>
-
-                                                </ul>
-                                                <% if(locals.user){ %>
-                                                        <form action="/comments/create" method="POST">
-                                                                <input type="text" placeholder="Write a comment" name="comment">
-                                                                <input type="hidden" name="post" value="<%= post._id %>">
-                                                                <input type="submit" value="Comment">
-                                                        </form>
-                                                <% } %>
-
-                                        </div>
-                                </p>
-                        </li>
+                <% for(post of locals.posts){ %>
+                        <%- include("_post") -%>
                 <% } %>
 
         </ul>

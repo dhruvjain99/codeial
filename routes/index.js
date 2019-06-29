@@ -10,7 +10,7 @@ router.get('/', homeController.home);
 
 //[TODO - 2] Redirect all the other routes
 router.use('/users', require('./users'));
-router.use('/post', require('./posts'));
+router.use('/posts', require('./posts'));
 router.use('/comments', require('./comments'));
 
 module.exports = router;
