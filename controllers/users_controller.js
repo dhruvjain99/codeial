@@ -1,21 +1,18 @@
 const User = require('../models/user');
 
 //render the profile page
-module.exports.profile = function(req, res){
-    User.findById(req.params.id, function(err, profileUser){
-        if(err){
-            console.log("Error in fetching the profile of a user from the database");
-            return;
-        }
-
+module.exports.profile = async function(req, res){
+    try{
+        let user = await User.findById(req.params.id);
         return res.render('profile', {
             title: "Profile",
-            profile_user:profileUser
+            profile_user: user
         });
-
-    });
-    
-};
+    } catch(err){
+        console.log("Error in fetching the profile of a user from the database :: " + err);
+        return;
+    }
+}
 
 //render the sign-in page
 module.exports.signIn = function(req, res){
@@ -41,31 +38,25 @@ module.exports.signUp = function(req, res){
 };
 
 //Create a user 
-module.exports.createUser = function(req, res){
+module.exports.createUser = async function(req, res){
     if(req.body.password != req.body.confirm_password){
         return res.redirect('back');
     }
 
-    User.findOne({email: req.body.email}, function(err, user){
-        if(err){
-            console.log("Error in finding user from database.");
-            return;
-        }
-
+    try{
+        let user = await User.findOne({email: req.body.email})
         if(!user){
-            User.create(req.body, function(err, newUser){
-                if(err){
-                    console.log("Error in creating a user.");
-                    return;
-                }
-
-                return res.redirect('/users/sign-in');
-            });
+            let newUser = await User.create(req.body);
+            return res.redirect('/users/sign-in');
         } else{
             return res.redirect('back');
         }
-    });
-};
+
+    } catch(err){
+        console.log("Error :: " + err);
+        return;
+    }
+}
 
 module.exports.createSession = function(req, res){
     return res.redirect('/');
@@ -79,18 +70,16 @@ module.exports.destroySession = function (req, res){
 }
 
 // Update the users details
-module.exports.updateProfile = function(req, res){
-    if(req.user.id == req.params.id){
-        User.findByIdAndUpdate(req.params.id, req.body, function(err, profileUser){
-            if(err){
-                console.log("Error in updating the profile information of the user");
-                return;
-            }
-
+module.exports.updateProfile = async function(req, res){
+    try{
+        if(req.user.id == req.params.id){
+            let user = await User.findByIdAndUpdate(req.params.id, req.body);  
             return res.redirect('back');
-
-        });
-    } else{
-        return res.status(401).send("Unauthorized");
+        } else{
+            return res.status(401).send("Unauthorized");
+        }
+    } catch(err){
+        console.log("Error :: " + err);
+        return;
     }
 }

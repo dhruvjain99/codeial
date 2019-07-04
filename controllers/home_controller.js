@@ -1,35 +1,26 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 
-module.exports.home = function (req, res){
-    Post.find({})
-    .populate('user')
-    .populate({
-        path: 'comments', 
-        populate: {
-            path: 'user'
-        }
-    })
-    .exec(function(err, postsList){
-        if(err){
-            console.log("Error in fetching all the posts from the database.");
-            return;
-        }
-
-        User.find({}, function(err, usersList){
-            if(err){
-                console.log("Error in fetching the list of users from the database");
-                return;
+module.exports.home = async function (req, res){
+    try{
+        let allPosts = await Post.find({})
+        .populate('user')
+        .populate({
+            path: 'comments', 
+            populate: {
+                path: 'user'
             }
-            return res.render('home', {
-                title: "Home",
-                posts: postsList,
-                all_users: usersList
-            });
-    
         });
-
         
-    });
+        let allUsers = await User.find({});
     
-};
+        return res.render('home', {
+            title: "Home",
+            posts: allPosts,
+            all_users: allUsers
+        });
+    } catch(err){
+        console.log("Error :: " + err);
+        return;
+    }
+}
