@@ -8,6 +8,8 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const MongoStore = require('connect-mongo')(session);
 const sassMiddleware = require('node-sass-middleware');
+const flash = require('connect-flash');
+const customMware = require('./config/middleware');
 const port = 8080;
 const app = express();
 
@@ -65,6 +67,11 @@ app.use(session({
 //Tell app to use passport for authentication
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Setup express to use connect-flash 
+app.use(flash());
+app.use(customMware.setFlash);
+
 
 app.use(passport.setAuthenticatedUser);
 

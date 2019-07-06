@@ -8,10 +8,21 @@ module.exports.createPost = async function(req, res){
             content: req.body.content,
             user: req.user.id
         });
+
+        if(req.xhr){
+            return res.status(200).json({
+                data:{
+                    post: newPost
+                },
+                message: 'Post created!'
+            });
+        }
+
+        req.flash('success', 'Post created successfully');
         return res.redirect('back');
     } catch(err){
-        console.log("Error :: " + err);
-        return;
+        req.flash('error', err);
+        return res.redirect('back');
     }
 };
 
@@ -23,9 +34,10 @@ module.exports.destroyPost = async function(req, res){
             post.remove();
             await Comment.deleteMany({post: req.params.id});
         }
+        req.flash('success', 'Post and comments deleted successfully.')
         return res.redirect('back');
     } catch(err){
-        console.log("Error :: " + err);
+        req.flash('error', err);
         return;
     }
 }

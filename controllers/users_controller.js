@@ -47,24 +47,29 @@ module.exports.createUser = async function(req, res){
         let user = await User.findOne({email: req.body.email})
         if(!user){
             let newUser = await User.create(req.body);
+            req.flash('success', 'Congratulations! Your account has been created.');
             return res.redirect('/users/sign-in');
         } else{
+            req.flash('success', 'Your account already exists.');
             return res.redirect('back');
         }
 
     } catch(err){
-        console.log("Error :: " + err);
+        req.flash('error', err);
         return;
     }
 }
 
 module.exports.createSession = function(req, res){
+    req.flash('success', 'Successfully logged in');
+
     return res.redirect('/');
 };
 
 
 module.exports.destroySession = function (req, res){
     req.logout();
+    req.flash('success', 'You have logged out');
 
     return res.redirect('/');
 }
@@ -73,13 +78,14 @@ module.exports.destroySession = function (req, res){
 module.exports.updateProfile = async function(req, res){
     try{
         if(req.user.id == req.params.id){
-            let user = await User.findByIdAndUpdate(req.params.id, req.body);  
+            let user = await User.findByIdAndUpdate(req.params.id, req.body); 
+            req.flash('success', 'Profile updated successfully.') 
             return res.redirect('back');
         } else{
             return res.status(401).send("Unauthorized");
         }
     } catch(err){
-        console.log("Error :: " + err);
+        req.flash('error', err);
         return;
     }
 }
