@@ -10,9 +10,11 @@
                 success: function(data){
                     let newPost = newPostDom(data.data.post);
                     $('#posts-list-container>ul').prepend(newPost);
+                    deletePost($(' .post-delete-button', newPost));
+                    displayFlash(data.data.flash);
                 },
                 error: function(err){
-                    console.log("Error in sending ajax request ::", err.res);
+                    console.log("Error in sending ajax request ::", err.responseText);
                 }
             });
         });
@@ -20,7 +22,7 @@
 
 
     let newPostDom = function(post){
-        return $(`<li id="post-${ post.id }">
+        return $(`<li id="post-${ post._id }">
         <p>
                 <a class="post-delete-button" href="/posts/destroy/${ post._id }">X</a>
                 Content : ${ post.content }
@@ -40,5 +42,28 @@
 </li>`);
     }
 
+    let deletePost = function (deleteLink){
+        $(deleteLink).click(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: 'get',
+                url: $(deleteLink).prop('href'),
+                success: function(data){
+                    $(`#post-${data.data.post_id}`).remove();
+                    displayFlash(data.data.flash);
+                },
+                error: function(err){
+                    console.log("Error in sending ajax request to delete ::", err.responseText)
+                }
+            })
+
+        });
+    }
+
     createPost();
+    var allDeletePostButtons = $('#posts-list-container ul li .post-delete-button');
+    for(let deleteButtonLink of allDeletePostButtons){
+        deletePost(deleteButtonLink);
+    }
 }

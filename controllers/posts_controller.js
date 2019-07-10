@@ -9,16 +9,30 @@ module.exports.createPost = async function(req, res){
             user: req.user.id
         });
 
+        newPost = await Post.findById(newPost._id).populate('user');
+        
+        let postCreated = {
+            _id: newPost._id,
+            content: newPost.content,
+            user: {
+                name: newPost.user.name
+            }
+        };
+        
+        req.flash('success', 'Post created successfully');
+
         if(req.xhr){
             return res.status(200).json({
-                data:{
-                    post: newPost
+                data: {
+                    post: postCreated,
+                    flash: {
+                        'success': req.flash('success')
+                    }
                 },
                 message: 'Post created!'
             });
         }
 
-        req.flash('success', 'Post created successfully');
         return res.redirect('back');
     } catch(err){
         req.flash('error', err);
@@ -33,8 +47,23 @@ module.exports.destroyPost = async function(req, res){
         if(post.user == req.user.id){
             post.remove();
             await Comment.deleteMany({post: req.params.id});
+
+            req.flash('success', 'Post and comments deleted successfully.');
+
+            if(req.xhr){
+                return res.status(200).json({
+                    data: {
+                        post_id: req.params.id,
+                        flash: {
+                            'success': req.flash('success')
+                        }
+                    },
+                    message: 'Post deleted'
+                });
+            }
+
+
         }
-        req.flash('success', 'Post and comments deleted successfully.')
         return res.redirect('back');
     } catch(err){
         req.flash('error', err);
