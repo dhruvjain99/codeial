@@ -33,6 +33,10 @@ app.use(cookieParser());
 
 //setup static files access
 app.use(express.static('./assets'));
+
+// Redirecting requests on uploads to uploads folder
+app.use('/uploads', express.static('./uploads'));
+
 // extract styles and script tags from sub-pages into layout
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);

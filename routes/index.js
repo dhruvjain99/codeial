@@ -13,4 +13,7 @@ router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));
 router.use('/comments', require('./comments'));
 
+// Redirect all the api requests to index.js of api
+router.use('/api', require('./api')); // require('./api') will make request to require('./api/index'), we could have directly mentioned './api/index' as well, it automatically searches for index file.
+
 module.exports = router;

@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 //render the profile page
 module.exports.profile = async function(req, res){
@@ -78,9 +80,30 @@ module.exports.destroySession = function (req, res){
 module.exports.updateProfile = async function(req, res){
     try{
         if(req.user.id == req.params.id){
-            let user = await User.findByIdAndUpdate(req.params.id, req.body); 
-            req.flash('success', 'Profile updated successfully.') 
-            return res.redirect('back');
+            let user = await User.findById(req.params.id); 
+            User.uploadedAvatar(req, res, function(err){
+                if(err){
+                    console.log("*******Multer Error ::", err);
+                    return;
+                }
+
+                user.name = req.body.name;
+                user.email = req.body.email;
+
+                if(req.file){
+                    if(user.avatar && fs.existsSync(path.join(__dirname, "..", user.avatar))){
+                        console.log('File EXISTS');
+                        fs.unlinkSync(path.join(__dirname, "..", user.avatar));
+                        console.log('OLD FILE DELETED');
+                    }
+
+                    user.avatar = User.avatarPath + req.file.filename;
+                }
+                user.save();
+                req.flash('success', 'Profile updated successfully.'); 
+                return res.redirect('back');
+            });
+
         } else{
             return res.status(401).send("Unauthorized");
         }
