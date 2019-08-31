@@ -30,17 +30,22 @@ module.exports.index = async function(req, res){
     }
 }
 
-
+//Action to delete a post after JWT authentication
 module.exports.destroy = async function(req, res){
     try{
         let post = await Post.findById(req.params.id); 
-        post.remove();
-        await Comment.deleteMany({post: post._id});
-
-        return res.json(200, {
-            message: 'Post is deleted successfully'
-        });
-
+        if(post.user == req.user.id){
+            post.remove();
+            await Comment.deleteMany({post: post._id});
+            return res.json(200, {
+                message: 'Post is deleted successfully'
+            });
+        } else {
+            return res.json(422, {
+                message: 'Unauthorized to delete'
+            })
+        }
+        
     } catch(err){
         return res.json(500, {
             message: 'Internal Server Error'

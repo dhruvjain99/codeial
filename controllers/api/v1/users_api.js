@@ -4,7 +4,7 @@ const User = require('../../../models/user');
 
 module.exports.createSession = async function(req, res){
     try{
-        let user = User.findOne({email: req.body.email});
+        let user = await User.findOne({email: req.body.email});
         if(user && (user.password == req.body.password)){
             return res.json(200, {
                 message: 'Signed In successfully, keep the token safe.',
