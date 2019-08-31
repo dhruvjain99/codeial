@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../../../models/user');
 
+//Action to create session for API request to return JSON web token
 module.exports.createSession = async function(req, res){
     try{
         let user = await User.findOne({email: req.body.email});

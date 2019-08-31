@@ -40,6 +40,7 @@ module.exports.createPost = async function(req, res){
     }
 };
 
+//Action to delete a post along with comments from the database
 module.exports.destroyPost = async function(req, res){
     try{
         let post = await Post.findById(req.params.id);
