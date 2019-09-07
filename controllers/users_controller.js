@@ -1,6 +1,9 @@
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+const resetPasswordToken = require('../models/reset_password_token');
+const crypto = require('crypto');
+const resetPasswordMailer = require('../mailers/reset_password_mailer');
 
 //render the profile page
 module.exports.profile = async function(req, res){
@@ -110,5 +113,75 @@ module.exports.updateProfile = async function(req, res){
     } catch(err){
         req.flash('error', err);
         return;
+    }
+}
+
+
+//Render the forgot password page
+module.exports.forgotPassword = function(req, res){
+    return res.render('forgot_password', {
+        title: "Codeial | Forgot Password",
+    });
+}
+
+//Create reset password token and send Mail 
+module.exports.generateResetPasswordToken = async function(req, res){
+    try{
+        let user = await User.findOne({email: req.body.email});
+        if(user){
+            let resetTokenCode = crypto.randomBytes(20).toString('hex');
+            let token = await resetPasswordToken.findOneAndUpdate({user: user}, {resetToken: resetTokenCode, isValid: true}, {new: true}).populate('user');
+            if(!token){
+                token = await resetPasswordToken.create({
+                    user: user,
+                    resetToken: resetTokenCode,
+                    isValid: true
+                }); 
+            }  
+            console.log(token);
+            resetPasswordMailer.resetPassword(token);
+            return res.redirect('/users/sign-in');
+
+        } else{
+            return res.redirect('/');
+        }
+    }catch(err){
+        console.log("****************** Error", err);
+        return;
+    }
+}
+
+//Render reset password page
+module.exports.resetPassword = async function(req, res){
+    let token = await resetPasswordToken.findOne({resetToken: req.query.resetToken});
+    if(token && token.isValid){
+        return res.render('reset_password', {
+            title: 'Codeial | Reset Password',
+            resetToken: req.query.resetToken,
+        });
+    } else {
+        return res.render('404_error', {
+            title: 'Page Not Found'
+        });
+    }
+}
+
+//Update password and expire token
+module.exports.updatePassword = async function(req, res){
+    let token = await resetPasswordToken.findOne({resetToken: req.body.resetToken});
+    if(token && token.isValid){
+        if(req.body.newPassword == req.body.confirmPassword){
+            let user = await User.findByIdAndUpdate(token.user, {password: req.body.newPassword}, {new: true});
+            token.isValid = false;
+            token.save();
+
+            return res.redirect('/users/sign-in');
+        } else {
+            return;
+        }
+    } else {
+        return res.render('404_error', {
+            title: 'Page Not Found',
+        });
     }
 }

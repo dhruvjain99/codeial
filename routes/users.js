@@ -34,4 +34,16 @@ router.get('/auth/google', passport.authenticate('google', {scope: ['profile', '
 //Create a route for callback URL for google authentication
 router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/sign-in'}), usersController.createSession);
 
+//Create a route to forgot-password
+router.get('/forgot-password', usersController.forgotPassword); 
+
+//Create a route for generation of reset-password-token-mail
+router.post('/reset-password-token', usersController.generateResetPasswordToken);
+
+//Create route to reset password
+router.get('/reset-password', usersController.resetPassword);
+
+//create a route to change password
+router.post('/change-password', usersController.updatePassword);
+
 module.exports = router;
