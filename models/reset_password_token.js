@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const resetPasswordTokenSchema = mongoose.Schema({
+const resetPasswordTokenSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

@@ -1,0 +1,67 @@
+$chat-box-background-color: #FFFFFF;
+#chat_box_container{
+    background-color: $chat-box-background-color;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    border: 1px dashed grey;
+    height: 325px;
+    width: 250px;
+    padding: 5px;
+
+    ul{
+        height: 80%;
+        list-style-type: none;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow: auto; 
+
+        li{
+            margin: 2px;
+            overflow-wrap: break-word;
+            display: flex;
+
+            span{
+                width: max-content;
+                padding: 9px;
+            }
+        }
+    }
+}
+
+.sent-messages{
+    flex-direction: row-reverse;
+    span{
+        background-color: aquamarine;
+    }
+}
+.received-messages{
+    flex-direction: row;
+    span{
+        background-color: bisque;
+    }
+}
+
+#type-message-form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 20%;
+}
+
+#chat-message-form{
+    width: 65%;
+    height: 25px;
+    border: none;
+}
+
+#send-chat-button{
+    height: 27px;
+    width: 30%;
+    border: none;
+    background-color: green;
+    color: white;
+}
