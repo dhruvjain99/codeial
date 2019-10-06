@@ -15,6 +15,12 @@ module.exports.chatSockets = function(chatServer){
             io.in(data.chat_room).emit('user_joined', data);
         });
 
+        socket.on('send_message', function(data){
+            console.log('Message sent!', data);
+
+            io.in(data.chat_room).emit('receive_message', data);
+        });
+
     });
 
 }
