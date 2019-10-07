@@ -12,7 +12,7 @@ const MongoStore = require('connect-mongo')(session);
 const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
-
+const env = require('./config/environment');
 
 const port = 3000;
 const app = express();
@@ -32,8 +32,8 @@ chatServer.listen(5000, function(err){
 // Note: you must place sass-middleware *before* `express.static` or else it will not work.
 
 app.use(sassMiddleware({
-    src: './assets/scss',
-    dest: './assets/css',
+    src: path.join(__dirname, env.assets_path, 'scss'),
+    dest: path.join(__dirname, env.assets_path, 'css'),
     debug: true,
     outputStyle: 'expanded',
     prefix: '/css' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
@@ -46,7 +46,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 //setup static files access
-app.use(express.static('./assets'));
+app.use(express.static(path.join(__dirname, env.assets_path)));
 
 // Redirecting requests on uploads to uploads folder
 app.use('/uploads', express.static('./uploads'));
@@ -68,7 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 //Setup the express-session to encrypt the key
 app.use(session({
     name: 'Codeial',
-    secret: 'blahsomething',
+    secret: env.session_secret_key,
     saveUninitialized: false,
     resave: false,
     cookie: {
