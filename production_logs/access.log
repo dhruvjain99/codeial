@@ -62,3 +62,11 @@
 [0mGET /css/layout.css [36m304 [0m13.617 ms - -[0m
 [0mGET /css/header.css [36m304 [0m98.195 ms - -[0m
 [0mGET /css/footer.css [36m304 [0m50.802 ms - -[0m
+[0mGET / [32m200 [0m2627.232 ms - 5570[0m
+[0mGET /js/home_posts.js [36m304 [0m96.182 ms - -[0m
+[0mGET /js/home_comments.js [36m304 [0m94.385 ms - -[0m
+[0mGET /js/chat_engine.js [36m304 [0m69.330 ms - -[0m
+[0mGET /css/header.css [32m200 [0m431.800 ms - -[0m
+[0mGET /css/home.css [32m200 [0m490.487 ms - -[0m
+[0mGET /css/layout.css [32m200 [0m683.804 ms - -[0m
+[0mGET /css/footer.css [32m200 [0m333.241 ms - -[0m

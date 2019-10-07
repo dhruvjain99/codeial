@@ -17,6 +17,7 @@ const logger = require('morgan');
 
 const port = 3000;
 const app = express();
+require('./config/view_helpers')(app);
 
 const chatServer = require('http').createServer(app);
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);

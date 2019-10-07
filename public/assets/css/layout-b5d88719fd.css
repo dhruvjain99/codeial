@@ -1,0 +1,10 @@
+body {
+  margin: 0px;
+}
+
+body #layout-main {
+  background-color: white;
+  min-height: 70vh;
+  height: auto;
+  border: 0.1px solid transparent;
+}
