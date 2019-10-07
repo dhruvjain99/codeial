@@ -13,6 +13,7 @@ const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
 const env = require('./config/environment');
+const logger = require('morgan');
 
 const port = 3000;
 const app = express();
@@ -28,16 +29,20 @@ chatServer.listen(5000, function(err){
     console.log('Chat Server is running on 5000');
 });
 
+app.use(logger(env.morgan.mode, env.morgan.options));
+
 //Setup the sass middleware to precompile the scss files to css files
 // Note: you must place sass-middleware *before* `express.static` or else it will not work.
-
-app.use(sassMiddleware({
-    src: path.join(__dirname, env.assets_path, 'scss'),
-    dest: path.join(__dirname, env.assets_path, 'css'),
-    debug: true,
-    outputStyle: 'expanded',
-    prefix: '/css' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-}));
+if(env.name == 'development'){
+    app.use(sassMiddleware({
+        src: path.join(__dirname, env.assets_path, 'scss'),
+        dest: path.join(__dirname, env.assets_path, 'css'),
+        debug: true,
+        outputStyle: 'expanded',
+        prefix: '/css' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+    }));
+    
+}
 
 //Parse the post requests
 app.use(express.urlencoded());
