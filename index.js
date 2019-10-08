@@ -46,7 +46,7 @@ if(env.name == 'development'){
 }
 
 //Parse the post requests
-app.use(express.urlencoded());
+app.use(express.urlencoded({ useNewUrlParser: true }));
 
 //Parse the cookie received with every request
 app.use(cookieParser());
