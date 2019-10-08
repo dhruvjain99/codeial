@@ -19,7 +19,7 @@ router.post('/create-user', usersController.createUser);
 //Create a route to sign-in
 router.post('/create-session', passport.authenticate(
     'local', 
-    {failureRedirect: '/sign-in'}
+    {failureRedirect: '/users/sign-in'}
     ), usersController.createSession);
 
 // Create a route to sign-out
@@ -32,7 +32,7 @@ router.post('/update/:id', passport.checkAuthentication, usersController.updateP
 router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
 //Create a route for callback URL for google authentication
-router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/sign-in'}), usersController.createSession);
+router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/users/sign-in'}), usersController.createSession);
 
 //Create a route to forgot-password
 router.get('/forgot-password', usersController.forgotPassword); 
